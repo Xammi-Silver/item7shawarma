@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Item 7 Shawarma</title>
+
+<style>
+body {
+  font-family: Arial;
+  margin: 0;
+  background: #0a0a0a;
+  color: white;
+  text-align: center;
+}
+
+header {
+  padding: 20px;
+  background: black;
+}
+
+.menu {
+  padding: 20px;
+}
+
+.card {
+  background: #111;
+  margin: 10px;
+  padding: 15px;
+  border-radius: 10px;
+}
+
+.price {
+  color: #25D366;
+}
+
+input, select {
+  width: 80%;
+  padding: 10px;
+  margin: 8px;
+  border-radius: 6px;
+  border: none;
+}
+
+button {
+  padding: 12px 20px;
+  background: #25D366;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-weight: bold;
+}
+
+.total {
+  color: #25D366;
+  font-size: 18px;
+  margin-top: 10px;
+}
+
+.slots {
+  color: red;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<h1>ITEM 7 SHAWARMA</h1>
+<p class="slots" id="slots">⚠️ 10 slots remaining</p>
+</header>
+
+<div class="menu">
+
+<div class="card">
+Chicken Shawarma - <span class="price">₦5000</span>
+</div>
+
+<div class="card">
+Beef Shawarma - <span class="price">₦5000</span>
+</div>
+
+<div class="card">
+Mixed Shawarma Combo - <span class="price">₦5500</span>
+</div>
+
+<div class="card">
+Rice + Chicken + Plantain - <span class="price">₦5500</span>
+</div>
+
+<h2>Place Order</h2>
+
+<select id="item" onchange="calc()">
+<option value="5000">Chicken Shawarma - ₦5000</option>
+<option value="5000">Beef Shawarma - ₦5000</option>
+<option value="5500">Mixed Shawarma Combo - ₦5500</option>
+<option value="5500">Rice Combo - ₦5500</option>
+</select>
+
+<select id="riceType">
+<option value="">Rice Type (Optional)</option>
+<option>Jollof Rice</option>
+<option>Fried Rice</option>
+<option>Combo</option>
+</select>
+
+<input type="number" id="qty" placeholder="Quantity" oninput="calc()">
+<input type="text" id="name" placeholder="Your Name">
+<input type="text" id="address" placeholder="Delivery Location">
+
+<div class="total" id="total">Total: ₦0</div>
+
+<p>Pay to:</p>
+<p>OPay - Samuel Alokwe</p>
+<p>8138357172</p>
+
+<button onclick="order()">I Have Paid</button>
+
+</div>
+
+<script>
+let slots = 10;
+
+function calc() {
+  let price = Number(document.getElementById("item").value);
+  let qty = Number(document.getElementById("qty").value);
+
+  if (!qty || qty <= 0) {
+    document.getElementById("total").innerText = "Total: ₦0";
+    return;
+  }
+
+  let total = price * qty;
+  document.getElementById("total").innerText = "Total: ₦" + total;
+}
+
+function order() {
+  let qty = Number(document.getElementById("qty").value);
+  let name = document.getElementById("name").value;
+  let address = document.getElementById("address").value;
+  let riceType = document.getElementById("riceType").value;
+
+  if (!qty || !name || !address) {
+    alert("Fill all fields!");
+    return;
+  }
+
+  if (slots > 0) slots--;
+  document.getElementById("slots").innerText = "⚠️ " + slots + " slots remaining";
+
+  let item = document.getElementById("item").options[document.getElementById("item").selectedIndex].text;
+  let total = document.getElementById("total").innerText;
+
+  let extra = riceType ? "\\nRice Type: " + riceType : "";
+
+  let msg =
+`🔥 PAID ORDER 🔥
+
+Item: ${item}${extra}
+Qty: ${qty}
+${total}
+Name: ${name}
+Location: ${address}
+
+I have paid.`;
+
+  let url = "https://wa.me/2349018746113?text=" + encodeURIComponent(msg);
+
+  // BEST WORKING METHOD
+  window.open(url, "_blank");
+}
+</script>
+
+</body>
+</html>
